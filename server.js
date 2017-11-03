@@ -17,8 +17,12 @@ app.post('/', (req, res) => {
   if(Object.keys(errors).length == 0){
     console.log("Sending email");
     sendEmail(req.body, res);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.sendStatus(200)
   }else{
     console.log(errors);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.sendStatus(500)
   }
 });
 
