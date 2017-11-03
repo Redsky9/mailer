@@ -4,14 +4,15 @@ let nodemailer = require('nodemailer');
 let sanitizer = require('express-sanitizer');
 const keys = require('./config/keys');
 let getIP = require('ipware')().get_ip;
-let session = require('express-session')
+let mongoose = require('mongoose');
 let app = express();
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8081; 
+
+let Mail = mongoose.model('mails');
 
 app.use(bP.urlencoded({extended: true}));
 app.use(bP.json());
 app.use(sanitizer());
-app.use(session({ secret: 'some random cat', cookie: { maxAge: 60000 }}))
 
 app.post('/', (req, res) => {
   console.log(getIP(req));
@@ -108,5 +109,25 @@ function sanitizeCode(data) {
     data.body[it] = data.sanitize(data.body[it]);
   };
   return data;
+}
+
+function findIp(ip) {
+  Mail.findOne({ip: ip}).then(mail => {
+    if(mail){
+      done(null, mail);
+    }else{
+      new Mail({
+        ip: mail.ip,
+        lastLogin: new Date().now(),
+        mailsSent: 0
+      })
+      .save((err) => {
+        if(err) throw err;
+      })
+      .then(mail => {
+        done(null, mail)
+      });
+    }
+  });
 }
 
