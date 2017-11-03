@@ -1,19 +1,19 @@
 let express = require('express');
 let bP = require('body-parser');
 let nodemailer = require('nodemailer');
-let sanitizer = require('sanitizer');
+let sanitizer = require('express-sanitizer');
 const keys = require('./config/keys');
 let app = express();
 const PORT = process.env.PORT || 8081;
 
 app.use(bP.urlencoded({extended: true}));
 app.use(bP.json());
+app.use(sanitizer());
 
 app.post('/', (req, res) => {
   let errors = checkEmail(req.body);
-  for(let it in req.body){
-    sanitizer.sanitize(req.body[it].toString())
-  };
+  req.body = sanitizeCode(req.body);
+  console.log(req.body);
   if(Object.keys(errors).length == 0){
     console.log("Sending email");
     sendEmail(req.body, res);
@@ -22,7 +22,7 @@ app.post('/', (req, res) => {
   }else{
     console.log(errors);
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.sendStatus(500)
+    res.sendStatus(500).send({error: errors});
   }
 });
 
@@ -87,5 +87,12 @@ function checkEmail(data) {
     error.contactMessage = "Message field does not exist."
   }
   return error;
+}
+
+function sanitizeCode(data) {
+  for(let it in data.body){
+    data.body[it] = data.sanitize(data.body[it]);
+  };
+  return data;
 }
 
