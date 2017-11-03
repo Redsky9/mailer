@@ -18,11 +18,11 @@ app.post('/', (req, res) => {
     console.log("Sending email");
     sendEmail(req.body, res);
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.sendStatus(200)
+    res.sendStatus(200).end();
   }else{
     console.log(errors);
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.sendStatus(500).send({error: errors});
+    res.sendStatus(500).end();
   }
 });
 
