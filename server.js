@@ -16,6 +16,7 @@ app.use(session({ secret: 'some random cat', cookie: { maxAge: 60000 }}))
 app.post('/', (req, res) => {
   console.log(getIP(req));
   console.log(req.session);
+  console.log(new Date());
   let errors = checkEmail(req.body);
   req.body = sanitizeCode(req.body);
   console.log(req.body);
