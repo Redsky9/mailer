@@ -16,10 +16,10 @@ app.use(session({ secret: 'some random cat', cookie: { maxAge: 60000 }}))
 app.post('/', (req, res) => {
   console.log(getIP(req));
   let now = Date.now();
-  let then = new Date(req.session.cookie['_expires']);
+  let then = new Date(req.session.cookie['_expires']).getTime();
   console.log(now);
-  console.log(then.getTime());
-  console.log(now - then);
+  console.log(then);
+  console.log(then - now);
   let errors = checkEmail(req.body);
   req.body = sanitizeCode(req.body);
   console.log(req.body);
