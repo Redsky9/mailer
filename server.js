@@ -3,6 +3,7 @@ let bP = require('body-parser');
 let nodemailer = require('nodemailer');
 let sanitizer = require('express-sanitizer');
 const keys = require('./config/keys');
+let getIP = require('ipware')().get_ip;
 let app = express();
 const PORT = process.env.PORT || 8081;
 
@@ -11,6 +12,7 @@ app.use(bP.json());
 app.use(sanitizer());
 
 app.post('/', (req, res) => {
+  console.log(getIP(req));
   let errors = checkEmail(req.body);
   req.body = sanitizeCode(req.body);
   console.log(req.body);

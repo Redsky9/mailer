@@ -18,6 +18,7 @@
     "express-sanitizer": "^1.0.2",
     "express-validator": "^4.3.0",
     "html": "^1.0.0",
+    "ipware": "^1.0.0",
     "nodemailer": "^4.3.1"
   },
   "devDependencies": {}
