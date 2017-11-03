@@ -20,6 +20,10 @@ app.post('/', (req, res) => {
   console.log(now);
   console.log(then);
   console.log(then - now);
+  if((then - now) > 0){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.sendStatus(500).end();
+  }
   let errors = checkEmail(req.body);
   req.body = sanitizeCode(req.body);
   console.log(req.body);
