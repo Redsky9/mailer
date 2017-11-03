@@ -18,7 +18,7 @@ app.post('/', (req, res) => {
   let now = Date.now();
   let then = new Date(req.session.cookie['_expires']);
   console.log(now);
-  console.log(then);
+  console.log(then.getTime());
   console.log(now - then);
   let errors = checkEmail(req.body);
   req.body = sanitizeCode(req.body);
